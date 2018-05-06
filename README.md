@@ -130,7 +130,8 @@ auto retrieve_campaign_ads_f = [&](boost::optional<std::vector<ICOCampaign>> cam
 };
 
 //creating bidder endpoint utilizing self-referencing pattern
-exchange_handler<DSLT>(std::chrono::milliseconds(10))
+exchange_handler<DSLT> bid_handler(std::chrono::milliseconds(10));
+bid_handler
 .logger([](const std::string &data) {
     LOG(debug) << "bid request=" << data ;
 })
@@ -215,10 +216,16 @@ $ cd Release
 $ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_RANLIB=/usr/local/opt/llvm/bin/llvm-ranlib -DCMAKE_AR=/usr/local/opt/llvm/bin/llvm-ar .. -G "Unix Makefiles"
 ```
 ### Parallel Builds
-When building on Linux and Mac OS X with Make it's possible to automatically adjust the concurreny of the build using `nproc` command line tool that returns number of CPUs available to the Make execution context\: 
+When building on Linux and Mac OS X with Make it's possible to automatically adjust the concurreny of the build using `nproc` for Linux and `sysctl -n hw.physicalcpu` for Mac OS X command line tools that returns number of CPUs available to the Make execution context\: 
 
+Linux :
 ```
 $ make -j $(nproc) ... 
+```
+
+Mac OS X :
+```
+make -j $(sysctl -n hw.physicalcpu) ...
 ```
 
 It's also possible to specifying the target _Load Average_ with `-l` flag to prevent machine overloading\:
