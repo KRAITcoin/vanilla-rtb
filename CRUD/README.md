@@ -3,7 +3,7 @@ Restful web-service written in C++11  based on boost.ASIO and CRUD handlers
 
 ### REST handler with regex
 
-```C++
+```C++11
 using regex_restful_dispatcher_t =  http::crud::crud_dispatcher<http::server::request, http::server::reply> ;
     regex_restful_dispatcher_t regex_handler(".") ; //root is irrelavant for REST only used for web-server
     regex_handler.crud_match(boost::regex("/venue_handler/(\w+)") )
